@@ -56,9 +56,14 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     super.initState();
-  print("Levelno$levelNo");
-    temp = List.filled(14, "");
+   get();
+  }
+  get()
+  {
+    print("Levelno$levelNo");
+
     user_ans = List.filled(ans[levelNo].toString().length, '');
+    temp = List.filled(user_ans.length, "");
     for (int i = 0; i < ans[levelNo].toString().length; i++) {
       option.add(ans[levelNo][i]);
     }
@@ -82,6 +87,7 @@ class _HomeState extends State<Home> {
         onPageChanged: (value) {
           levelNo=value;
           print(levelNo);
+          get();
           setState(() {
 
           });
@@ -127,6 +133,37 @@ class _HomeState extends State<Home> {
               )),
               Expanded(
                   child: Container(
+                    child: Row(children: [
+                      ElevatedButton(onPressed: () {
+                        print(temp);
+                        for(int i=0;i<temp.length;i++){
+                          if(temp[i]!=''){
+                            option[temp[i]]=user_ans[i];
+                            user_ans[i]="";
+                          }
+                        }
+                        setState(() {
+
+                        });
+                      }, child: Text("All")),
+                      ElevatedButton(onPressed: () {
+                       // print(temp);
+                       for(int i=temp.length-1;i>=0;i--)
+                         {
+                         //  print(i);
+                           if(temp[i]!=''){
+                             print(temp[i]);
+                            option[temp[i]]=user_ans[i];
+                            temp[i]="";
+                            user_ans[i]="";
+                             break;
+                           }
+                         }
+                        setState(() {
+
+                        });
+                      }, child: Text("Last"))
+                    ],),
                 color: Colors.yellow,
               )),
               Expanded(
@@ -159,7 +196,6 @@ class _HomeState extends State<Home> {
                                     print(temp);
                                   }
                                 }
-
                                 setState(() {});
                               },
                             ))),
