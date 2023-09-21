@@ -105,7 +105,12 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     super.initState();
+   levelNo=widget.level;
    get();
+
+    setState(() {
+
+    });
   }
   get()
   {
@@ -122,6 +127,9 @@ class _HomeState extends State<Home> {
     }
     option.shuffle();
     controller=PageController(initialPage: levelNo);
+    setState(() {
+
+    });
   }
 
   @override
