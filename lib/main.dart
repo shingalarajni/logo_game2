@@ -35,6 +35,7 @@ class _FirstState extends State<First> {
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 4, crossAxisSpacing: 5, mainAxisSpacing: 5),
         itemBuilder: (context, index) {
+          String abc=First.prefs!.getString("level_status$index") ?? "";
           return InkWell(
             onTap: () {
               Navigator.pushReplacement(context, MaterialPageRoute(
@@ -44,7 +45,7 @@ class _FirstState extends State<First> {
               ));
             },
             child: Container(
-              color: (First.prefs!.getString("level_status$index")=="yes") ? Colors.grey : Colors.yellow,
+              color:  (abc=="yes")? Colors.grey : Colors.yellow,
               child: Text("$index"),
             ),
           );
@@ -141,7 +142,8 @@ class _HomeState extends State<Home> {
           });
         },
         itemBuilder: (context, index) {
-          return Column(
+          String abc=First.prefs!.getString("level_status$levelNo") ?? "";
+          return (abc=="yes") ?  Center(child: Text("Win"),) : Column(
             children: [
               Expanded(
                   flex: 2,
@@ -152,13 +154,13 @@ class _HomeState extends State<Home> {
                   )),
               Expanded(
                   child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  children: List.generate(
-                      user_ans.length,
-                      (index) => InkWell(
+                    height: double.infinity,
+                    width: double.infinity,
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      children: List.generate(
+                          user_ans.length,
+                              (index) => InkWell(
                             child: Container(
                               width: 50,
                               alignment: Alignment.center,
@@ -177,9 +179,9 @@ class _HomeState extends State<Home> {
                               setState(() {});
                             },
                           )),
-                ),
-                color: Colors.blue,
-              )),
+                    ),
+                    color: Colors.blue,
+                  )),
               Expanded(
                   child: Container(
                     child: Row(children: [
@@ -196,32 +198,32 @@ class _HomeState extends State<Home> {
                         });
                       }, child: Text("All")),
                       ElevatedButton(onPressed: () {
-                       // print(temp);
-                       for(int i=temp.length-1;i>=0;i--)
-                         {
-                         //  print(i);
-                           if(temp[i]!=''){
-                             print(temp[i]);
+                        // print(temp);
+                        for(int i=temp.length-1;i>=0;i--)
+                        {
+                          //  print(i);
+                          if(temp[i]!=''){
+                            print(temp[i]);
                             option[temp[i]]=user_ans[i];
                             temp[i]="";
                             user_ans[i]="";
-                             break;
-                           }
-                         }
+                            break;
+                          }
+                        }
                         setState(() {
 
                         });
                       }, child: Text("Last"))
                     ],),
-                color: Colors.yellow,
-              )),
+                    color: Colors.yellow,
+                  )),
               Expanded(
                   child: Container(
-                child: Wrap(
-                    alignment: WrapAlignment.center,
-                    children: List.generate(
-                        option.length,
-                        (index) => InkWell(
+                    child: Wrap(
+                        alignment: WrapAlignment.center,
+                        children: List.generate(
+                            option.length,
+                                (index) => InkWell(
                               child: Container(
                                 width: 50,
                                 alignment: Alignment.center,
@@ -249,8 +251,8 @@ class _HomeState extends State<Home> {
                                 setState(() {});
                               },
                             ))),
-                color: Colors.green,
-              )),
+                    color: Colors.green,
+                  )),
             ],
           );
         },
