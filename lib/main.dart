@@ -1,19 +1,67 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: Home(),
+    home: First(),
   ));
 }
 
+class First extends StatefulWidget {
+  static SharedPreferences? prefs;
+
+  @override
+  State<First> createState() => _FirstState();
+}
+
+class _FirstState extends State<First> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    get();
+  }
+
+  get() async {
+    First.prefs = await SharedPreferences.getInstance();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GridView.builder(
+        itemCount: 12,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4, crossAxisSpacing: 5, mainAxisSpacing: 5),
+        itemBuilder: (context, index) {
+          return InkWell(
+            onTap: () {
+              Navigator.pushReplacement(context, MaterialPageRoute(
+                builder: (context) {
+                  return Home(index);
+                },
+              ));
+            },
+            child: Container(
+              color: (First.prefs!.getString("level_status$index")=="yes") ? Colors.grey : Colors.yellow,
+              child: Text("$index"),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  int level;
+
+  Home(this.level);
 
   @override
   State<Home> createState() => _HomeState();
 }
-
 class _HomeState extends State<Home> {
   PageController ?controller;
   List logo = [
@@ -192,6 +240,7 @@ class _HomeState extends State<Home> {
                                       user_ans[i] = option[index];
                                       temp[i] = index;
                                       option[index] = "";
+                                      checkwin();
                                       break;
                                     }
                                     print(temp);
@@ -208,4 +257,33 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+  checkwin() {
+    String win_ans = user_ans.join("");
+    print(win_ans);
+    print(ans[levelNo]);
+    if (ans[levelNo] == win_ans) {
+      First.prefs!.setString("level_status$levelNo", "yes");
+      levelNo++;
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("You win this level"),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    //  controller!.jumpToPage(levelNo);
+                    Navigator.pop(context);
+                    controller!.animateToPage(levelNo,
+                        duration: Duration(seconds: 2), curve: Curves.linear);
+                    setState(() {});
+                  },
+                  child: Text("Next Level"))
+            ],
+          );
+        },
+      );
+    }
+  }
+
 }
