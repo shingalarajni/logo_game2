@@ -124,6 +124,7 @@ class _HomeState extends State<Home> {
                             ),
                             onTap: () {
                               option[temp[index]] = user_ans[index];
+                              temp[index]="";
                               user_ans[index] = "";
                               setState(() {});
                             },
